@@ -84,9 +84,10 @@ void loop()
 
 # BASIC EXAMPLE
 ```
-#include <EventSystem.h>
-#include <Arduino.h>
-// ===========================BASIC EXAMPLE===============================
+// ===========================Author: Natan Lisowski========================
+// ===========================Email: pythonboardsbeta@gmail.com=============
+// ===========================GitHub: https://github.com/natnqweb ==========
+// ===========================BASIC EXAMPLE=================================
 // =========================================================================
 // This is a basic example of how to use the EventSystem library.
 //  - The EventSystem library is a simple library that allows you to create
@@ -95,28 +96,33 @@ void loop()
 // It will print out the events that are received.
 // every 1000ms temperature and humidity will be updated and that change in value will trigger event.
 // =========================================================================
-// ----------------------------VARIABLES----------------------------------
+// =================================Header Files============================
+#include <EventSystem.h>
+#include <Arduino.h>
+// =================================Header Files============================
+// =========================================================================
+// ----------------------------GLOBAL VARIABLES & CONST---------------------
 
 Variable temperature = 15.5; // Celsius
 Variable humidity = 65;      //%
 unsigned long lastUpdateTime = 0;
 static const unsigned long updateInterval = 1000; // ms
 
-// ----------------------------VARIABLES----------------------------------
+// ----------------------------GLOBAL VARIABLES & CONST---------------------
 // =========================================================================
-// ---------------------------- EVENTS DECLARATION-------------------------
+// ---------------------------- EVENTS DECLARATION--------------------------
 
 void TemperatureChangedEvent();
 void HumidityChangedEvent();
 
-// ---------------------------- EVENTS DECLARATION-------------------------
+// ---------------------------- EVENTS DECLARATION--------------------------
 // =========================================================================
-// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+// -----------------------REGISTERING EVENTS AND VARIABLES------------------
 
 Event events[]{TemperatureChangedEvent, HumidityChangedEvent};
 Variable *variables[]{&temperature, &humidity};
 
-// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+// -----------------------REGISTERING EVENTS AND VARIABLES------------------
 // =========================================================================
 // =========================================================================
 // ----------------------------------SETUP----------------------------------
@@ -146,7 +152,7 @@ void loop()
 // ----------------------------------LOOP-----------------------------------
 // =========================================================================
 // =========================================================================
-// ---------------------------- EVENTS DEFINITION-------------------------
+// ---------------------------- EVENTS DEFINITION---------------------------
 
 void TemperatureChangedEvent()
 {
@@ -162,7 +168,28 @@ void HumidityChangedEvent()
     Serial.println(F("%"));
 }
 
-// ---------------------------- EVENTS DEFINITION-------------------------
+// ---------------------------- EVENTS DEFINITION---------------------------
 // =========================================================================
 ```
 
+MIT License
+
+Copyright (c) 2022 Natan Lisowski
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
