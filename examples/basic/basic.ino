@@ -1,47 +1,88 @@
 #include <EventSystem.h>
 #include <Arduino.h>
-Variable v1 = 1;
-Variable v2 = 2;
-void event2()
-{
-    Serial.println("call2");
-}
-void event3()
-{
-    Serial.println("call3");
-}
+// ===========================BASIC EXAMPLE===============================
+// =========================================================================
+// This is a basic example of how to use the EventSystem library.
+//  - The EventSystem library is a simple library that allows you to create
+//    events and trigger them.
+//  - The EventSystem library is designed to be used with the Arduino framework.
+// It will print out the events that are received.
+// every 1000ms temperature and humidity will be updated and that change in value will trigger event.
+// =========================================================================
+// ----------------------------VARIABLES----------------------------------
+#pragma region VARIABLES
 
-long v3 = 1;
+Variable temperature = 15.5; // Celsius
+Variable humidity = 65;      //%
+unsigned long lastUpdateTime = 0;
+static const unsigned long updateInterval = 1000; // ms
 
-void event1()
-{
-    Serial.println("call");
-}
-void event4()
-{
-    Serial.println("call4");
-}
-void event5()
-{
-    Serial.println("call5");
-}
-long v4 = 5;
-Event events[]{event1, event2, event3, event4, event5};
-Variable *variables[]{&v1, &v2, &v2, (Variable *)&v3, (Variable *)&v4};
+// ----------------------------VARIABLES----------------------------------
+#pragma endregion
+
+// ---------------------------- EVENTS DECLARATION-------------------------
+#pragma region EVENTS DECLARATION
+
+void TemperatureChangedEvent();
+void HumidityChangedEvent();
+
+// ---------------------------- EVENTS DECLARATION-------------------------
+#pragma endregion
+
+// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+#pragma region EVENTS DECLARATION
+
+Event events[]{TemperatureChangedEvent, HumidityChangedEvent};
+Variable *variables[]{&temperature, &humidity};
+
+// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+#pragma endregion
+
+// =========================================================================
+// =========================================================================
+// ----------------------------------SETUP----------------------------------
 
 void setup()
 {
     Serial.begin(115200);
-    eventSystem.Subscribe(events, variables, EVENT_SIZE(variables));
+    eventSystem.Subscribe(events, variables, EVENT_SIZE(events));
 }
+
+// ----------------------------------SETUP----------------------------------
+// =========================================================================
+// =========================================================================
+// ----------------------------------LOOP-----------------------------------
 
 void loop()
 {
     eventSystem.Run();
-    // sys2.Run();
-    v1 += 1;
-    v2 += 1;
-    v4 += 1;
-    v3 += 1;
-    delay(1000);
+    if (millis() - lastUpdateTime > updateInterval)
+    {
+        lastUpdateTime = millis();
+        temperature = temperature > 30 ? 20 : temperature + 0.5;
+        humidity = humidity > 80 ? 50 : humidity + 1;
+    }
 }
+
+// ----------------------------------LOOP-----------------------------------
+// =========================================================================
+// =========================================================================
+// ---------------------------- EVENTS DEFINITION-------------------------
+#pragma region EVENTS DEFINITION
+
+void TemperatureUpdateEvent()
+{
+    Serial.print(L("Temperature updated T = "));
+    Serial.print(temperature);
+    Serial.println(L("C"));
+}
+
+void HumidityUpdateEvent()
+{
+    Serial.print(L("Humidity updated H = "));
+    Serial.print(humidity);
+    Serial.println(L("%"));
+}
+
+// ---------------------------- EVENTS DEFINITION-------------------------
+#pragma endregion
