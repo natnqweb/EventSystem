@@ -1,7 +1,8 @@
 #pragma once
+#include "config.h"
 #define EVENT_SIZE(x) ((int)(sizeof(x) / 2))
 #ifndef EVENTS_NUMBER
-#define EVENTS_NUMBER 1
+#define EVENTS_NUMBER 10
 #endif
 
 typedef void (*Event)(void);
