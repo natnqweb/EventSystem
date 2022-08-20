@@ -38,6 +38,7 @@ void TemperatureChangeEvent()
 float temperature = 23.4f;
 void setup()
 {
+  Serial.begin(115200);
   eventSysFloat.Subscribe(TemperatureChangeEvent, &temperature);
   temperature +=1;
 }
@@ -68,6 +69,7 @@ Event events[]{ TemperatureChangeEvent };
 Variable* variables[]{ &temperature };
 void setup()
 {
+  Serial.begin(115200);
   eventSys.Subscribe(events, variables, EVENT_SIZE(events));
   temperature +=1;
 }
