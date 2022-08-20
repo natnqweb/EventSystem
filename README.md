@@ -78,11 +78,15 @@ void loop()
 {
   eventSys.Run();
 }
+
 ```
+
 ## Static Global Object 
+
 `static BasicEventSystem eventSystem`
 
 # BASIC EXAMPLE
+
 ```
 // ===========================Author: Natan Lisowski========================
 // ===========================Email: pythonboardsbeta@gmail.com=============
@@ -171,6 +175,25 @@ void HumidityChangedEvent()
 // ---------------------------- EVENTS DEFINITION---------------------------
 // =========================================================================
 ```
+
+## Currently There Is a limit how many events you can register using EventSystem class however that is not the case in BasicEventSystem
+
+You can always Expand this limit in config.h
+there is `#define EVENTS_NUMBER 10` limit set to 10 events.
+
+### to expand this limit you must perform following steps.
+
+1. Go to library src folder.
+
+    ![path](<assets/path.png>)
+
+2. Open config.h.
+
+    ![config.h](<assets/config.png>)
+
+3. Change EVENTS_NUMBER value to whatever fits your preferences.
+
+    ![Changing](<assets/modify.png>)
 
 MIT License
 
