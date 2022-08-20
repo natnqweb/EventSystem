@@ -1,119 +1,168 @@
 
-# Simpletimer
-a timer based on micros that will make your coding a lot easier
+# EventSystem Library
 
-timer() 
-as simple as that you can perform action every amount of time you feed to function for example
+## Event based system designed for Arduino Framework. EventSystem monitors variables and fire event when the variable value change.
+## Classes & TypeDefs
+| TypeDefs | ActualTypes |
+| ----------- | ----------- |
+| `Variable` | `Double` |
+| `Event` | `void function()` |
 
-    Simpletimer timer1;	
-    timer1.timer(1000)
+| Class |  Constructor |
+| ----------- | ----------- |
+| template <*class T*> `EventSystem` | `EventSystem() = default` |
+| `BasicEventSystem` | `BasicEventSystem() = default` |
+
+### Example Object Construction
+- `BasicEventSystem eventSys`
+- `EventSystem<Variable> eventSysVar`
+- `EventSystem<Int> eventSysInt`
+- `EventSystem<float> eventSysFloat`
+- `EventSystem<long> eventSysLong`
+- `EventSystem<char> eventSysChar`
+
+## EventSystem Class Methods
+| Return Type | Method Name | Parameters |
+| ----------- | ----------- | ----------- |
+| `void` | `Run` | `void` |
+| `void` | `Subscribe` | `Event* events`, `T* var`|
+### Methods Calling Example
+It is recommended to use Subscribe Method inside setup
+```
+#include <EventSystem.h>
+EventSystem<float> eventSysFloat;
+void TemperatureChangeEvent()
+{
+  Serial.println("Hello From Event");
+}
+float temperature = 23.4f;
+void setup()
+{
+  Serial.begin(115200);
+  eventSysFloat.Subscribe(TemperatureChangeEvent, &temperature);
+  temperature +=1;
+}
+// Always place Run in Loop
+void loop()
+{
+  eventSysFloat.Run();
+}
+```
+
+
+## BasicEventSystem Class Methods
+| Return Type | Method Name | Parameters |
+| ----------- | ----------- | ----------- |
+| `void` | `Run` | `void` |
+| `void` | `Subscribe` | `Event *event`, `double **variables`, `int numberOfEvents`|
+### Methods Calling Example
+It is recommended to use Subscribe Method inside setup
+```
+#include <EventSystem.h>
+BasicEventSystem eventSys;
+void TemperatureChangeEvent()
+{
+  Serial.println("Hello From Event");
+}
+Variable temperature = 23.4;
+Event events[]{ TemperatureChangeEvent };
+Variable* variables[]{ &temperature };
+void setup()
+{
+  Serial.begin(115200);
+  eventSys.Subscribe(events, variables, EVENT_SIZE(events));
+  temperature +=1;
+}
+// Always place Run in Loop
+void loop()
+{
+  eventSys.Run();
+}
+```
+## Static Global Object 
+`static BasicEventSystem eventSystem`
+
+# BASIC EXAMPLE
+```
+#include <EventSystem.h>
+#include <Arduino.h>
+// ===========================BASIC EXAMPLE===============================
+// =========================================================================
+// This is a basic example of how to use the EventSystem library.
+//  - The EventSystem library is a simple library that allows you to create
+//    events and trigger them.
+//  - The EventSystem library is designed to be used with the Arduino framework.
+// It will print out the events that are received.
+// every 1000ms temperature and humidity will be updated and that change in value will trigger event.
+// =========================================================================
+// ----------------------------VARIABLES----------------------------------
+
+Variable temperature = 15.5; // Celsius
+Variable humidity = 65;      //%
+unsigned long lastUpdateTime = 0;
+static const unsigned long updateInterval = 1000; // ms
+
+// ----------------------------VARIABLES----------------------------------
+// =========================================================================
+// ---------------------------- EVENTS DECLARATION-------------------------
+
+void TemperatureChangedEvent();
+void HumidityChangedEvent();
+
+// ---------------------------- EVENTS DECLARATION-------------------------
+// =========================================================================
+// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+
+Event events[]{TemperatureChangedEvent, HumidityChangedEvent};
+Variable *variables[]{&temperature, &humidity};
+
+// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+// =========================================================================
+// =========================================================================
+// ----------------------------------SETUP----------------------------------
+
+void setup()
+{
+    Serial.begin(115200);
+    eventSystem.Subscribe(events, variables, EVENT_SIZE(events));
+}
+
+// ----------------------------------SETUP----------------------------------
+// =========================================================================
+// =========================================================================
+// ----------------------------------LOOP-----------------------------------
+
+void loop()
+{
+    eventSystem.Run();
+    if (millis() - lastUpdateTime > updateInterval)
     {
-    //entry every 1000ms
+        lastUpdateTime = millis();
+        temperature = temperature > 30 ? 20 : temperature + 0.5;
+        humidity = humidity > 80 ? 50 : humidity + 1;
     }
-    i use it as a tool in my projects so i don't need to repeat myself creating timers
-from Version 2.0 up you can register callbacks now only 'void functions(void)'
+}
 
-# callback example
-    #include "Simpletimer.h"
-    // callback function cant take anything and return anything
-    Simpletimer timer1;
-    void callback1(){
-      Serial.println("entry every 1 sec");
-    }
+// ----------------------------------LOOP-----------------------------------
+// =========================================================================
+// =========================================================================
+// ---------------------------- EVENTS DEFINITION-------------------------
 
-    void setup(){
-    Serial.begin(9600);
-    timer1.register_callback(callback1);
-    }
-    void loop(){
-      timer1.call_callback(1000);
+void TemperatureChangedEvent()
+{
+    Serial.print(F("Temperature updated T = "));
+    Serial.print(temperature);
+    Serial.println(F("C"));
+}
 
-    }
-version 2.1
-# multiple callbacks example
-    #include "Simpletimer.h"
-    // callback function cant take anything and return anything
-    #define ledpin 8
+void HumidityChangedEvent()
+{
+    Serial.print(F("Humidity updated H = "));
+    Serial.print(humidity);
+    Serial.println(F("%"));
+}
 
-    Simpletimer multicb;
-
-    void callback1();
-    void callback2();
-    void callback3();
-    void blink();
-    void callback1(){
-      Serial.println(F("entry every 1 sec"));
-    }
-    void callback2(){
-      Serial.println(F("entry every 0.5 sec"));
-    }
-    void callback3(){
-      Serial.println(F("entry every 0.2 sec"));
-    }
-    volatile bool state=false;
-    void blink(){
-    state=!state;
-    }
-    void setup(){
-        pinMode(ledpin,OUTPUT);
-        size_t number_of_callbacks=4;
-        Simpletimer::callback all_callbacks[4]={callback1,callback2,callback3,blink};
-        unsigned long timers[4]={1000,500,200,199};
-
-    Serial.begin(115200);
-    multicb.register_multiple_callbacks(all_callbacks,timers,number_of_callbacks);
-    Serial.println(F("program started"));
-
-    }
-    void loop(){
-
-
-
-        multicb.run();
-        digitalWrite(ledpin,state);
-
-
-    }
-## perform tasks only once in loop
-    #include <Simpletimer.h>
-    // callback function cant take anything and return anything
-
-    Simpletimer::RunOnce Once;
-    int i=1;
-    void callback1(){
-      Serial.println(F("entry once"));
-      i++;
-    }
-
-    void callback2(){
-         Serial.println(F("other method"));
-         i++;
-         Serial.println("number of tasks performed : "+String(i));
-    }
-
-    void setup(){
-
-    Serial.begin(115200);
-
-
-
-    }
-    void loop(){
-        //static Simpletimer::RunOnce DoSomething([&](){ here goes your code that need to run once});
-        // perform  task once in loop
-        static Simpletimer::RunOnce DoSomething;
-        DoSomething.Run([&](){callback1(); Serial.println(F("you can place here anything "));});
-        // reset previous task in anotherone and then it can perform second time
-        static Simpletimer::RunOnce reset_previous_task;
-        reset_previous_task.Run([&](){DoSomething.Reset(); Serial.println("task 1 RESET being called now");});
-        //another way to perform task once you can always reset calling Once.Reset();
-        Once.Run(callback2);
-
-
-
-
-
-
-
-    }
+// ---------------------------- EVENTS DEFINITION-------------------------
+// =========================================================================
+```
 
