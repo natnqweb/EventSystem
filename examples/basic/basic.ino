@@ -10,7 +10,6 @@
 // every 1000ms temperature and humidity will be updated and that change in value will trigger event.
 // =========================================================================
 // ----------------------------VARIABLES----------------------------------
-#pragma region VARIABLES
 
 Variable temperature = 15.5; // Celsius
 Variable humidity = 65;      //%
@@ -18,26 +17,20 @@ unsigned long lastUpdateTime = 0;
 static const unsigned long updateInterval = 1000; // ms
 
 // ----------------------------VARIABLES----------------------------------
-#pragma endregion
-
+// =========================================================================
 // ---------------------------- EVENTS DECLARATION-------------------------
-#pragma region EVENTS DECLARATION
 
 void TemperatureChangedEvent();
 void HumidityChangedEvent();
 
 // ---------------------------- EVENTS DECLARATION-------------------------
-#pragma endregion
-
+// =========================================================================
 // -----------------------REGISTERING EVENTS AND VARIABLES-----------------
-#pragma region EVENTS DECLARATION
 
 Event events[]{TemperatureChangedEvent, HumidityChangedEvent};
 Variable *variables[]{&temperature, &humidity};
 
 // -----------------------REGISTERING EVENTS AND VARIABLES-----------------
-#pragma endregion
-
 // =========================================================================
 // =========================================================================
 // ----------------------------------SETUP----------------------------------
@@ -68,21 +61,20 @@ void loop()
 // =========================================================================
 // =========================================================================
 // ---------------------------- EVENTS DEFINITION-------------------------
-#pragma region EVENTS DEFINITION
 
-void TemperatureUpdateEvent()
+void TemperatureChangedEvent()
 {
-    Serial.print(L("Temperature updated T = "));
+    Serial.print(F("Temperature updated T = "));
     Serial.print(temperature);
-    Serial.println(L("C"));
+    Serial.println(F("C"));
 }
 
-void HumidityUpdateEvent()
+void HumidityChangedEvent()
 {
-    Serial.print(L("Humidity updated H = "));
+    Serial.print(F("Humidity updated H = "));
     Serial.print(humidity);
-    Serial.println(L("%"));
+    Serial.println(F("%"));
 }
 
 // ---------------------------- EVENTS DEFINITION-------------------------
-#pragma endregion
+// =========================================================================
