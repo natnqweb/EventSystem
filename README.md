@@ -84,9 +84,10 @@ void loop()
 
 # BASIC EXAMPLE
 ```
-#include <EventSystem.h>
-#include <Arduino.h>
-// ===========================BASIC EXAMPLE===============================
+// ===========================Author: Natan Lisowski========================
+// ===========================Email: pythonboardsbeta@gmail.com=============
+// ===========================GitHub: https://github.com/natnqweb ==========
+// ===========================BASIC EXAMPLE=================================
 // =========================================================================
 // This is a basic example of how to use the EventSystem library.
 //  - The EventSystem library is a simple library that allows you to create
@@ -95,28 +96,33 @@ void loop()
 // It will print out the events that are received.
 // every 1000ms temperature and humidity will be updated and that change in value will trigger event.
 // =========================================================================
-// ----------------------------VARIABLES----------------------------------
+// =================================Header Files============================
+#include <EventSystem.h>
+#include <Arduino.h>
+// =================================Header Files============================
+// =========================================================================
+// ----------------------------GLOBAL VARIABLES & CONST---------------------
 
 Variable temperature = 15.5; // Celsius
 Variable humidity = 65;      //%
 unsigned long lastUpdateTime = 0;
 static const unsigned long updateInterval = 1000; // ms
 
-// ----------------------------VARIABLES----------------------------------
+// ----------------------------GLOBAL VARIABLES & CONST---------------------
 // =========================================================================
-// ---------------------------- EVENTS DECLARATION-------------------------
+// ---------------------------- EVENTS DECLARATION--------------------------
 
 void TemperatureChangedEvent();
 void HumidityChangedEvent();
 
-// ---------------------------- EVENTS DECLARATION-------------------------
+// ---------------------------- EVENTS DECLARATION--------------------------
 // =========================================================================
-// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+// -----------------------REGISTERING EVENTS AND VARIABLES------------------
 
 Event events[]{TemperatureChangedEvent, HumidityChangedEvent};
 Variable *variables[]{&temperature, &humidity};
 
-// -----------------------REGISTERING EVENTS AND VARIABLES-----------------
+// -----------------------REGISTERING EVENTS AND VARIABLES------------------
 // =========================================================================
 // =========================================================================
 // ----------------------------------SETUP----------------------------------
@@ -146,7 +152,7 @@ void loop()
 // ----------------------------------LOOP-----------------------------------
 // =========================================================================
 // =========================================================================
-// ---------------------------- EVENTS DEFINITION-------------------------
+// ---------------------------- EVENTS DEFINITION---------------------------
 
 void TemperatureChangedEvent()
 {
@@ -162,7 +168,7 @@ void HumidityChangedEvent()
     Serial.println(F("%"));
 }
 
-// ---------------------------- EVENTS DEFINITION-------------------------
+// ---------------------------- EVENTS DEFINITION---------------------------
 // =========================================================================
 ```
 
