@@ -3,6 +3,8 @@
 // ===========================GitHub: https://github.com/natnqweb ==========
 // ===========================LICENSE: MIT License==========================
 // ===========================Version: 1.0.0================================
+// ===========================DOCUMENTATION=================================
+// ======================LINK: https://github.com/natnqweb/EventSystem =====
 /*  MIT License
 
     Copyright(c) 2022 Natan Lisowski
