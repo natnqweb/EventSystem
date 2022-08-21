@@ -60,8 +60,19 @@ void HumidityChangedEvent();
 // =========================================================================
 // -----------------------REGISTERING EVENTS AND VARIABLES------------------
 
-Event events[]{TemperatureChangedEvent, HumidityChangedEvent, BlinkLED};
-Variable *variables[]{&temperature, &humidity, &temperature};
+Event events[]
+{
+    TemperatureChangedEvent,
+    HumidityChangedEvent,
+    BlinkLED
+};
+
+Variable* variables[]
+{
+    &temperature,
+    &humidity,
+    &temperature
+};
 
 // -----------------------REGISTERING EVENTS AND VARIABLES------------------
 // =========================================================================
