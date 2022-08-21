@@ -46,28 +46,29 @@ Variable temperature = 15.5; // Celsius
 Variable humidity = 65;      //%
 unsigned long lastUpdateTime = 0;
 static const unsigned long updateInterval = 1000; // ms
+static const int numberOfEvents = 3; // number of events you want to create
 bool ledState = false;
 
 // ----------------------------GLOBAL VARIABLES & CONST---------------------
 // =========================================================================
 // ---------------------------- EVENTS DECLARATION--------------------------
 
-void BlinkLED();
-void TemperatureChangedEvent();
-void HumidityChangedEvent();
+void TemperatureChangedEvent(); // event1
+void HumidityChangedEvent(); // event2
+void BlinkLED(); // event3
 
 // ---------------------------- EVENTS DECLARATION--------------------------
 // =========================================================================
 // -----------------------REGISTERING EVENTS AND VARIABLES------------------
 
-Event events[]
+Event events[numberOfEvents]
 {
     TemperatureChangedEvent,
     HumidityChangedEvent,
     BlinkLED
 };
 
-Variable* variables[]
+Variable* variables[numberOfEvents]
 {
     &temperature,
     &humidity,
@@ -83,7 +84,7 @@ void setup()
 {
     Serial.begin(115200);
     pinMode(LED_BUILTIN, OUTPUT);
-    eventSystem.Subscribe(events, variables, EVENT_SIZE(events));
+    eventSystem.Subscribe(events, variables, numberOfEvents);
 }
 
 // ----------------------------------SETUP----------------------------------

@@ -27,12 +27,13 @@
     SOFTWARE.
 */
 #include "EventSystem.h"
+
 template <>
 EventSystem<double>::EventSystem() = default;
 template <>
 EventSystem<double>::~EventSystem() = default;
 template <>
-void EventSystem<double>::Subscribe(Event event, double *object)
+void EventSystem<double>::Subscribe(Event event, double* object)
 {
     if (eventCount < EVENTS_NUMBER)
     {
@@ -60,7 +61,7 @@ EventSystem<long>::EventSystem() = default;
 template <>
 EventSystem<long>::~EventSystem() = default;
 template <>
-void EventSystem<long>::Subscribe(Event event, long *object)
+void EventSystem<long>::Subscribe(Event event, long* object)
 {
     if (eventCount < EVENTS_NUMBER)
     {
@@ -88,7 +89,7 @@ EventSystem<int>::EventSystem() = default;
 template <>
 EventSystem<int>::~EventSystem() = default;
 template <>
-void EventSystem<int>::Subscribe(Event event, int *object)
+void EventSystem<int>::Subscribe(Event event, int* object)
 {
     if (eventCount < EVENTS_NUMBER)
     {
@@ -116,7 +117,7 @@ EventSystem<float>::EventSystem() = default;
 template <>
 EventSystem<float>::~EventSystem() = default;
 template <>
-void EventSystem<float>::Subscribe(Event event, float *object)
+void EventSystem<float>::Subscribe(Event event, float* object)
 {
     if (eventCount < EVENTS_NUMBER)
     {
@@ -144,7 +145,7 @@ EventSystem<char>::EventSystem() = default;
 template <>
 EventSystem<char>::~EventSystem() = default;
 template <>
-void EventSystem<char>::Subscribe(Event event, char *object)
+void EventSystem<char>::Subscribe(Event event, char* object)
 {
     if (eventCount < EVENTS_NUMBER)
     {
@@ -174,13 +175,13 @@ BasicEventSystem::~BasicEventSystem()
     delete[] tempObjects;
 }
 
-void BasicEventSystem::Subscribe(Event *events, double **objects, int numberOfEvents)
+void BasicEventSystem::Subscribe(Event* events, double** objects, int numberOfEvents)
 {
     if (!bRegistered)
     {
         this->events = events;
         this->objects = objects;
-        tempObjects = new double[numberOfEvents]{};
+        tempObjects = new double[numberOfEvents] {};
         for (int i = 0; i < numberOfEvents; i++)
         {
             tempObjects[i] = *objects[i];
