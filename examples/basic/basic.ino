@@ -46,11 +46,13 @@ Variable temperature = 15.5; // Celsius
 Variable humidity = 65;      //%
 unsigned long lastUpdateTime = 0;
 static const unsigned long updateInterval = 1000; // ms
+bool ledState = false;
 
 // ----------------------------GLOBAL VARIABLES & CONST---------------------
 // =========================================================================
 // ---------------------------- EVENTS DECLARATION--------------------------
 
+void BlinkLED();
 void TemperatureChangedEvent();
 void HumidityChangedEvent();
 
@@ -58,8 +60,8 @@ void HumidityChangedEvent();
 // =========================================================================
 // -----------------------REGISTERING EVENTS AND VARIABLES------------------
 
-Event events[]{TemperatureChangedEvent, HumidityChangedEvent};
-Variable *variables[]{&temperature, &humidity};
+Event events[]{TemperatureChangedEvent, HumidityChangedEvent, BlinkLED};
+Variable *variables[]{&temperature, &humidity, &temperature};
 
 // -----------------------REGISTERING EVENTS AND VARIABLES------------------
 // =========================================================================
@@ -69,6 +71,7 @@ Variable *variables[]{&temperature, &humidity};
 void setup()
 {
     Serial.begin(115200);
+    pinMode(LED_BUILTIN, OUTPUT);
     eventSystem.Subscribe(events, variables, EVENT_SIZE(events));
 }
 
@@ -86,6 +89,7 @@ void loop()
         temperature = temperature > 30 ? 20 : temperature + 0.5;
         humidity = humidity > 80 ? 50 : humidity + 1;
     }
+    digitalWrite(LED_BUILTIN, ledState);
 }
 
 // ----------------------------------LOOP-----------------------------------
@@ -105,6 +109,11 @@ void HumidityChangedEvent()
     Serial.print(F("Humidity updated H = "));
     Serial.print(humidity);
     Serial.println(F("%"));
+}
+
+void BlinkLED()
+{
+    ledState = !ledState;
 }
 
 // ---------------------------- EVENTS DEFINITION---------------------------
