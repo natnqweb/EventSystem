@@ -13,6 +13,8 @@ EventSystem	KEYWORD1
 Run	KEYWORD2
 Subscribe	KEYWORD2
 EVENT_SIZE	KEYWORD2
+Stop	KEYWORD2
+Start	KEYWORD2
 
 # Datatypes && Variables (LITERAL1)
 Variable	LITERAL1

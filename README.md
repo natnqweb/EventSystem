@@ -55,6 +55,8 @@
 | ----------- | ----------- | ----------- |
 | `void` | `Run` | `void` |
 | `void` | `Subscribe` | `Event* events`, `T* var`|
+| `void` | `Stop` | `void` |
+| `void` | `Start` | `void` |
 
 ### Methods Calling Example
 
@@ -63,7 +65,7 @@ It is recommended to use Subscribe Method inside setup
 ```C++
 
 #include <EventSystem.h>
-EventSystem<float> eventSysFloat;
+EventSystem<float> eventSysFloat{};
 void TemperatureChangeEvent()
 {
   Serial.println("Hello From Event");
