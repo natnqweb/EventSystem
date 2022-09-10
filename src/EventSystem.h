@@ -74,3 +74,88 @@ private:
     double* tempObjects;
 };
 static BasicEventSystem eventSystem;
+
+template<class T>
+EventSystem<T>::EventSystem() = default;
+template<class T>
+EventSystem<T>::~EventSystem() = default;
+template<class T>
+void EventSystem<T>::Subscribe(Event event, T* object)
+{
+    if (eventCount < EVENTS_NUMBER)
+    {
+        *(events + eventCount) = event;
+        *(pointers + eventCount) = object;
+        *(objects + eventCount) = *object;
+        eventCount++;
+    }
+}
+template<class T>
+void EventSystem<T>::Run()
+{
+    for (int i = 0;((i < eventCount) && (!m_bStop)); i++)
+    {
+        if (*pointers[i] != objects[i])
+        {
+            objects[i] = *pointers[i];
+            events[i]();
+        }
+    }
+}
+template <class T>
+void EventSystem<T>::Stop()
+{
+    m_bStop = true;
+}
+
+template <class T>
+void EventSystem<T>::Start()
+{
+    m_bStop = false;
+}
+
+BasicEventSystem::BasicEventSystem() = default;
+
+BasicEventSystem::~BasicEventSystem()
+{
+    delete[] tempObjects;
+}
+
+void BasicEventSystem::Subscribe(Event* events, double** objects, int numberOfEvents)
+{
+    if (!bRegistered)
+    {
+        this->events = events;
+        this->objects = objects;
+        tempObjects = new double[numberOfEvents] {};
+        for (int i = 0; i < numberOfEvents; i++)
+        {
+            tempObjects[i] = *objects[i];
+        }
+        this->numberOfEvents = numberOfEvents;
+        bRegistered = true;
+    }
+}
+
+void BasicEventSystem::Run()
+{
+    for (int i = 0; ((i < numberOfEvents) && (!m_bStop)); i++)
+    {
+        if (*objects[i] != tempObjects[i])
+        {
+            tempObjects[i] = *objects[i];
+            events[i]();
+        }
+    }
+}
+
+void BasicEventSystem::Stop()
+{
+    m_bStop = true;
+}
+
+void BasicEventSystem::Start()
+{
+    m_bStop = false;
+}
+
