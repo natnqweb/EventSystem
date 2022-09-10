@@ -46,7 +46,7 @@ void EventSystem<double>::Subscribe(Event event, double* object)
 template <>
 void EventSystem<double>::Run()
 {
-    for (int i = 0; i < eventCount; i++)
+    for (int i = 0;((i < eventCount) && (!m_bStop)); i++)
     {
         if (*pointers[i] != objects[i])
         {
@@ -54,6 +54,17 @@ void EventSystem<double>::Run()
             events[i]();
         }
     }
+}
+template <>
+void EventSystem<double>::Stop()
+{
+    m_bStop = true;
+}
+
+template <>
+void EventSystem<double>::Start()
+{
+    m_bStop = false;
 }
 
 template <>
@@ -74,7 +85,7 @@ void EventSystem<long>::Subscribe(Event event, long* object)
 template <>
 void EventSystem<long>::Run()
 {
-    for (int i = 0; i < eventCount; i++)
+    for (int i = 0;((i < eventCount) && (!m_bStop)); i++)
     {
         if (*pointers[i] != objects[i])
         {
@@ -82,6 +93,17 @@ void EventSystem<long>::Run()
             events[i]();
         }
     }
+}
+template <>
+void EventSystem<long>::Stop()
+{
+    m_bStop = true;
+}
+
+template <>
+void EventSystem<long>::Start()
+{
+    m_bStop = false;
 }
 
 template <>
@@ -102,7 +124,7 @@ void EventSystem<int>::Subscribe(Event event, int* object)
 template <>
 void EventSystem<int>::Run()
 {
-    for (int i = 0; i < eventCount; i++)
+    for (int i = 0;((i < eventCount) && (!m_bStop)); i++)
     {
         if (*pointers[i] != objects[i])
         {
@@ -110,6 +132,18 @@ void EventSystem<int>::Run()
             events[i]();
         }
     }
+}
+
+template <>
+void EventSystem<int>::Stop()
+{
+    m_bStop = true;
+}
+
+template <>
+void EventSystem<int>::Start()
+{
+    m_bStop = false;
 }
 
 template <>
@@ -130,7 +164,7 @@ void EventSystem<float>::Subscribe(Event event, float* object)
 template <>
 void EventSystem<float>::Run()
 {
-    for (int i = 0; i < eventCount; i++)
+    for (int i = 0;((i < eventCount) && (!m_bStop)); i++)
     {
         if (*pointers[i] != objects[i])
         {
@@ -138,6 +172,18 @@ void EventSystem<float>::Run()
             events[i]();
         }
     }
+}
+
+template <>
+void EventSystem<float>::Stop()
+{
+    m_bStop = true;
+}
+
+template <>
+void EventSystem<float>::Start()
+{
+    m_bStop = false;
 }
 
 template <>
@@ -158,7 +204,7 @@ void EventSystem<char>::Subscribe(Event event, char* object)
 template <>
 void EventSystem<char>::Run()
 {
-    for (int i = 0; i < eventCount; i++)
+    for (int i = 0;((i < eventCount) && (!m_bStop)); i++)
     {
         if (*pointers[i] != objects[i])
         {
@@ -166,6 +212,18 @@ void EventSystem<char>::Run()
             events[i]();
         }
     }
+}
+
+template <>
+void EventSystem<char>::Stop()
+{
+    m_bStop = true;
+}
+
+template <>
+void EventSystem<char>::Start()
+{
+    m_bStop = false;
 }
 
 BasicEventSystem::BasicEventSystem() = default;
@@ -193,7 +251,7 @@ void BasicEventSystem::Subscribe(Event* events, double** objects, int numberOfEv
 
 void BasicEventSystem::Run()
 {
-    for (int i = 0; i < numberOfEvents; i++)
+    for (int i = 0; ((i < numberOfEvents) && (!m_bStop)); i++)
     {
         if (*objects[i] != tempObjects[i])
         {
@@ -201,4 +259,14 @@ void BasicEventSystem::Run()
             events[i]();
         }
     }
+}
+
+void BasicEventSystem::Stop()
+{
+    m_bStop = true;
+}
+
+void BasicEventSystem::Start()
+{
+    m_bStop = false;
 }

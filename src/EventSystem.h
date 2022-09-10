@@ -44,11 +44,14 @@ public:
     ~EventSystem();
     void Run();
     void Subscribe(Event event, T* object);
+    void Stop();
+    void Start();
 
 private:
     Event events[EVENTS_NUMBER]{};
     T objects[EVENTS_NUMBER]{};
     int eventCount = 0;
+    bool m_bStop{ false };
     T* pointers[EVENTS_NUMBER]{};
 };
 
@@ -58,9 +61,12 @@ public:
     BasicEventSystem();
     ~BasicEventSystem();
     void Run();
+    void Stop();
+    void Start();
     void Subscribe(Event* event, double** object, int numberOfEvents);
 
 private:
+    bool m_bStop = false;
     bool bRegistered = false;
     Event* events;
     double** objects;
