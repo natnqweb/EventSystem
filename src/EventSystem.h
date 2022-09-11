@@ -28,13 +28,25 @@
 */
 #pragma once
 #include "config.h"
-
 #ifndef EVENTS_NUMBER
 #define EVENTS_NUMBER 10
 #endif
 
 typedef void (*Event)(void);
 typedef double Variable;
+// MACRO FOR DECLARING EVENTS
+#define DECLARATION_MAP_BEGIN enum EVENT_SYSTEM_DECLARATIONS{
+#define DECLARATION_MAP_END EVENT_SYSTEM_SIZE};
+#define DECLARE_EVENT_FUNCTION(NAME) void NAME()
+#define DECLARE_EVENT(NAME,VARIABLE,VALUE) void NAME(); Variable VARIABLE{VALUE}
+#define DEFINE_EVENT_FUNCTION(NAME) void NAME()
+#define EVENT_LIST_START Event events[EVENT_SYSTEM_SIZE]{
+#define EVENT_LIST_END };
+#define VARIABLE_LIST_START Variable* variables[EVENT_SYSTEM_SIZE]{
+#define VARIABLE_LIST_END };
+#define EVENT_SYSTEM_AUTO() eventSystem.Subscribe(events, variables, EVENT_SYSTEM_SIZE)
+#define EVENT_SYSTEM_RUN() eventSystem.Run()
+#define EVENT_SYSTEM_SUBSCRIBE(X) eventSystem.Subscribe(events, variables, X)
 
 template <class T>
 class EventSystem
