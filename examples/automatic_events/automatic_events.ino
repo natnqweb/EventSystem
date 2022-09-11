@@ -42,42 +42,45 @@
 #include <Arduino.h>
 // =================================Header Files============================
 // =========================================================================
-// ----------------------------GLOBAL VARIABLES & CONST---------------------
+// ----------------------------GLOBAL---------------------
 
-Variable temperature = 15.5; // Celsius
-Variable humidity = 65;      //%
 unsigned long lastUpdateTime = 0;
 static const unsigned long updateInterval = 1000; // ms
-static const int numberOfEvents = 3; // number of events you want to create
 bool ledState = false;
 
-// ----------------------------GLOBAL VARIABLES & CONST---------------------
+// ----------------------------GLOBAL---------------------
 // =========================================================================
-// ---------------------------- EVENTS DECLARATION--------------------------
 
-void TemperatureChangedEvent(); // event1
-void HumidityChangedEvent(); // event2
-void BlinkLED(); // event3
+// ---------------------------- AUTOMATIC EVENTS --------------------------
 
-// ---------------------------- EVENTS DECLARATION--------------------------
-// =========================================================================
-// -----------------------REGISTERING EVENTS AND VARIABLES------------------
+// YOU MUST MAP EVERY EVENT/ naming convention is -> EVENT_(EVENT NAME)
+DECLARATION_MAP_BEGIN
+EVENT_TemperatureChangedEvent,
+EVENT_HumidityChangedEvent,
+EVENT_BlinkLED,
+DECLARATION_MAP_END
 
-Event events[numberOfEvents]
-{
-    TemperatureChangedEvent,
-    HumidityChangedEvent,
-    BlinkLED
-};
+DECLARE_EVENT(TemperatureChangedEvent /*event name*/, temperature /*variable name*/, 15.5 /*initial variable value*/);
+DECLARE_EVENT(HumidityChangedEvent, humidity, 65);
+DECLARE_EVENT_FUNCTION(BlinkLED); // blink led event // we dont sign variable to it becouse already existing variable will trigger it
 
-Variable* variables[numberOfEvents]
-{
-    &temperature,
-    &humidity,
-    &temperature
-};
+//when you declared event add it to event order matters order same as in declaration
+EVENT_LIST_START
+TemperatureChangedEvent,
+HumidityChangedEvent,
+BlinkLED,
+EVENT_LIST_END
 
-// -----------------------REGISTERING EVENTS AND VARIABLES------------------
+//same as above. remember to add & before variable name
+VARIABLE_LIST_START
+& temperature,
+& humidity,
+& temperature,// change in temperature will trigger LED
+VARIABLE_LIST_END
+
+
+// ---------------------------- AUTOMATIC EVENTS --------------------------
+
 // =========================================================================
 // =========================================================================
 // ----------------------------------SETUP----------------------------------
@@ -86,7 +89,7 @@ void setup()
 {
     Serial.begin(115200);
     pinMode(LED_BUILTIN, OUTPUT);
-    eventSystem.Subscribe(events, variables, numberOfEvents);
+    EVENT_SYSTEM_AUTO();
 }
 
 // ----------------------------------SETUP----------------------------------
@@ -96,7 +99,7 @@ void setup()
 
 void loop()
 {
-    eventSystem.Run();
+    EVENT_SYSTEM_RUN();
     if (millis() - lastUpdateTime > updateInterval)
     {
         lastUpdateTime = millis();
@@ -111,21 +114,21 @@ void loop()
 // =========================================================================
 // ---------------------------- EVENTS DEFINITION---------------------------
 
-void TemperatureChangedEvent()
+DEFINE_EVENT_FUNCTION(TemperatureChangedEvent)
 {
     Serial.print(F("Temperature updated T = "));
     Serial.print(temperature);
     Serial.println(F("C"));
 }
 
-void HumidityChangedEvent()
+DEFINE_EVENT_FUNCTION(HumidityChangedEvent)
 {
     Serial.print(F("Humidity updated H = "));
     Serial.print(humidity);
     Serial.println(F("%"));
 }
 
-void BlinkLED()
+DEFINE_EVENT_FUNCTION(BlinkLED)
 {
     ledState = !ledState;
 }
