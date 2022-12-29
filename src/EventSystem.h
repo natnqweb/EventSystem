@@ -154,9 +154,9 @@ void BasicEventSystem::Run()
 {
     for (int i = 0; ((i < numberOfEvents) && (!m_bStop)); i++)
     {
-        if (*(events[i]->object) != tempObjects[i])
+        if (*(events[i].object) != tempObjects[i])
         {
-            tempObjects[i] = *(events[i]->object);
+            tempObjects[i] = *(events[i].object);
             events[i].event();
         }
     }
