@@ -2,7 +2,7 @@
 // ===========================Email: pythonboardsbeta@gmail.com=============
 // ===========================GitHub: https://github.com/natnqweb ==========
 // ===========================LICENSE: MIT License==========================
-// ===========================Version: 1.0.0================================
+// ===========================Version: 1.2.2================================
 /*  MIT License
 
     Copyright(c) 2022 Natan Lisowski
@@ -34,17 +34,20 @@
 
 typedef void (*Event)(void);
 typedef double Variable;
+typedef struct _BasicEvent
+{
+    Event event;
+    double* object;
+} BasicEvent;
 // MACRO FOR DECLARING EVENTS
 #define DECLARATION_MAP_BEGIN enum EVENT_SYSTEM_DECLARATIONS{
 #define DECLARATION_MAP_END EVENT_SYSTEM_SIZE};
 #define DECLARE_EVENT_FUNCTION(NAME) void NAME()
 #define DECLARE_EVENT(NAME,VARIABLE,VALUE) void NAME(); Variable VARIABLE{VALUE}
 #define DEFINE_EVENT_FUNCTION(NAME) void NAME()
-#define EVENT_LIST_START Event events[EVENT_SYSTEM_SIZE]{
+#define EVENT_LIST_START BasicEvent events[]{
 #define EVENT_LIST_END };
-#define VARIABLE_LIST_START Variable* variables[EVENT_SYSTEM_SIZE]{
-#define VARIABLE_LIST_END };
-#define EVENT_SYSTEM_AUTO() eventSystem.Subscribe(events, variables, EVENT_SYSTEM_SIZE)
+#define EVENT_SYSTEM_AUTO() eventSystem.Subscribe(events, sizeof(events)/sizeof(events[0]))
 #define EVENT_SYSTEM_RUN() eventSystem.Run()
 #define EVENT_SYSTEM_SUBSCRIBE(X) eventSystem.Subscribe(events, variables, X)
 
@@ -75,13 +78,12 @@ public:
     void Run();
     void Stop();
     void Start();
-    void Subscribe(Event* event, double** object, int numberOfEvents);
+    void Subscribe(BasicEvent* basicEventArr, int numberOfEvents);
 
 private:
     bool m_bStop = false;
     bool bRegistered = false;
-    Event* events;
-    double** objects;
+    BasicEvent* events;
     int numberOfEvents = 0;
     double* tempObjects;
 };
@@ -133,16 +135,15 @@ BasicEventSystem::~BasicEventSystem()
     delete[] tempObjects;
 }
 
-void BasicEventSystem::Subscribe(Event* events, double** objects, int numberOfEvents)
+void BasicEventSystem::Subscribe(BasicEvent* basicEventArr, int numberOfEvents)
 {
     if (!bRegistered)
     {
-        this->events = events;
-        this->objects = objects;
+        events = basicEventArr;
         tempObjects = new double[numberOfEvents] {};
         for (int i = 0; i < numberOfEvents; i++)
         {
-            tempObjects[i] = *objects[i];
+            tempObjects[i] = *(basicEventArr[i].object);
         }
         this->numberOfEvents = numberOfEvents;
         bRegistered = true;
@@ -153,10 +154,10 @@ void BasicEventSystem::Run()
 {
     for (int i = 0; ((i < numberOfEvents) && (!m_bStop)); i++)
     {
-        if (*objects[i] != tempObjects[i])
+        if (*(events[i].object) != tempObjects[i])
         {
-            tempObjects[i] = *objects[i];
-            events[i]();
+            tempObjects[i] = *(events[i].object);
+            events[i].event();
         }
     }
 }

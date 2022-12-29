@@ -2,7 +2,7 @@
 // ===========================Email: pythonboardsbeta@gmail.com=============
 // ===========================GitHub: https://github.com/natnqweb ==========
 // ===========================LICENSE: MIT License==========================
-// ===========================Version: 1.2.0================================
+// ===========================Version: 1.2.2================================
 // ===========================DOCUMENTATION=================================
 // ======================LINK: https://github.com/natnqweb/EventSystem =====
 /*  MIT License
@@ -38,8 +38,8 @@
 // every 1000ms temperature and humidity will be updated and that change in value will trigger event.
 // =========================================================================
 // =================================Header Files============================
-#include <EventSystem.h>
 #include <Arduino.h>
+#include <EventSystem.h>
 // =================================Header Files============================
 // =========================================================================
 // ----------------------------GLOBAL---------------------
@@ -52,32 +52,15 @@ bool ledState = false;
 // =========================================================================
 
 // ---------------------------- AUTOMATIC EVENTS --------------------------
-
-// YOU MUST MAP EVERY EVENT/ naming convention is -> EVENT_(EVENT NAME)
-DECLARATION_MAP_BEGIN
-EVENT_TemperatureChangedEvent,
-EVENT_HumidityChangedEvent,
-EVENT_BlinkLED,
-DECLARATION_MAP_END
-
 DECLARE_EVENT(TemperatureChangedEvent /*event name*/, temperature /*variable name*/, 15.5 /*initial variable value*/);
 DECLARE_EVENT(HumidityChangedEvent, humidity, 65);
 DECLARE_EVENT_FUNCTION(BlinkLED); // blink led event // we dont sign variable to it becouse already existing variable will trigger it
 
-//when you declared event add it to event order matters order same as in declaration
 EVENT_LIST_START
-TemperatureChangedEvent,
-HumidityChangedEvent,
-BlinkLED,
+{ TemperatureChangedEvent, &temperature },
+{ HumidityChangedEvent, &humidity },
+{ BlinkLED, &temperature }
 EVENT_LIST_END
-
-//same as above. remember to add & before variable name
-VARIABLE_LIST_START
-& temperature,
-& humidity,
-& temperature,// change in temperature will trigger LED
-VARIABLE_LIST_END
-
 
 // ---------------------------- AUTOMATIC EVENTS --------------------------
 
